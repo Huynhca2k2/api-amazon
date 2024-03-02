@@ -69,6 +69,7 @@ const userSchema = new mongoose.Schema({
     radioValue: String,
     fullNameCard: String,
     month: String,
+    Comment: String,
     year: String,
 });
 
@@ -94,6 +95,7 @@ app.post('/adduser', async (req, res) =>{
         radioValue:req.body.radioValue,
         fullNameCard:req.body.fullNameCard,
         month: req.body.month,
+        comment: req.body.comment,
         year: req.body.year,
 
     });
