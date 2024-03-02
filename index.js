@@ -34,7 +34,7 @@ app.use('/images', express.static(path.join(__dirname, 'upload/images')));
 app.post("/upload", upload.single('imageItem'), (req, res) => {
     res.json({
         success:1,
-        image_url:`https://api-amazon-s37l.onrender.com/images/${req.file.filename}`
+        image_url:`http://localhost:4000/images/${req.file.filename}`
     })
 })
 
@@ -52,10 +52,9 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     image:{
-        type: String,
+        type: [String],
         required: true,
     },
-
     selectedCountry: String,
     bill: String,
     billUs1: String,
@@ -69,42 +68,66 @@ const userSchema = new mongoose.Schema({
     radioValue: String,
     fullNameCard: String,
     month: String,
-    Comment: String,
+    comment: String,
     year: String,
 });
+
 
 // Tạo model từ schema
 const User = mongoose.model('User', userSchema);
 
-app.post('/adduser', async (req, res) =>{
-    let randomNumber = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
-    const user = new User({
-        id:randomNumber,
-        fullName:req.body.fullName,
-        image:req.body.image,
-        selectedCountry:req.body.selectedCountry,
-        bill:req.body.bill,
-        billUs1:req.body.billUs1,
-        billUs2:req.body.billUs2,
-        phone:req.body.phone,
-        city:req.body.city,
-        card:req.body.card,
-        security:req.body.security,
-        region:req.body.region,
-        zipcode:req.body.zipcode,
-        radioValue:req.body.radioValue,
-        fullNameCard:req.body.fullNameCard,
-        month: req.body.month,
-        comment: req.body.comment,
-        year: req.body.year,
+app.post('/adduser', async (req, res) => {
+    
+    const existingUser = await User.findOne({ fullName: req.body.fullName });
 
-    });
+    if (existingUser) {
+        
+        existingUser.image = req.body.image;
+        existingUser.selectedCountry = req.body.selectedCountry;
+        existingUser.bill = req.body.bill;
+        existingUser.billUs1 = req.body.billUs1;
+        existingUser.billUs2 = req.body.billUs2;
+        existingUser.phone = req.body.phone;
+        existingUser.city = req.body.city;
+        existingUser.card = req.body.card;
+        existingUser.security = req.body.security;
+        existingUser.region = req.body.region;
+        existingUser.zipcode = req.body.zipcode;
+        existingUser.radioValue = req.body.radioValue;
+        existingUser.fullNameCard = req.body.fullNameCard;
+        existingUser.month = req.body.month;
+        existingUser.comment = req.body.comment;
+        existingUser.year = req.body.year;
 
-    console.log(user);
-    await user.save();
-    console.log("saved")
-    res.json({
-        success:true,
-        name:req.body.name,
-    })
-})
+        await existingUser.save();
+        console.log("User updated");
+        res.json({ success: true, name: req.body.name });
+    } else {
+        
+        let randomNumber = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+        const user = new User({
+            id: randomNumber,
+            fullName: req.body.fullName,
+            image: req.body.image,
+            selectedCountry: req.body.selectedCountry,
+            bill: req.body.bill,
+            billUs1: req.body.billUs1,
+            billUs2: req.body.billUs2,
+            phone: req.body.phone,
+            city: req.body.city,
+            card: req.body.card,
+            security: req.body.security,
+            region: req.body.region,
+            zipcode: req.body.zipcode,
+            radioValue: req.body.radioValue,
+            fullNameCard: req.body.fullNameCard,
+            month: req.body.month,
+            comment: req.body.comment,
+            year: req.body.year
+        });
+
+        await user.save();
+        console.log("User added");
+        res.json({ success: true, name: req.body.name });
+    }
+});
