@@ -34,7 +34,7 @@ app.use('/images', express.static(path.join(__dirname, 'upload/images')));
 app.post("/upload", upload.single('imageItem'), (req, res) => {
     res.json({
         success:1,
-        image_url:`http://localhost:4000/images/${req.file.filename}`
+        image_url:`https://api-amazon-s37l.onrender.com/images/${req.file.filename}`
     })
 })
 
