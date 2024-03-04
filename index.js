@@ -52,6 +52,8 @@ app.listen(port, () => {
 });
 
 const userSchema = new mongoose.Schema({
+    email: String,
+    password: String,
     fullName: String,
     image: [String],
     selectedCountry: String,
@@ -77,6 +79,8 @@ const Users = mongoose.model('Users', userSchema);
 app.post('/adduser', async (req, res) => {
     try {
         const user = new Users({
+            email: req.body.email,
+            password: req.body.password,
             fullName: req.body.fullName,
             image: req.body.image,
             selectedCountry: req.body.selectedCountry,
